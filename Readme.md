@@ -2,9 +2,7 @@
 
 ### About
 This library provides two high level API to decode DTMF audio or byte slice. 
-It uses the Goertzer algorithm. 
-It was initially built on [goertzel](https://github.com/CyCoreSystems/goertzel) by CyCoreSystems, but has been since ported to use [go-dsp](https://github.com/samuel/go-dsp).
-The underlying principle remains unchanged.
+It uses the Goertzel algorithm. 
 
 ### Examples
 The examples can be run from the examples folder.
@@ -52,3 +50,8 @@ func (dtmf *DTMF) DecodeDTMFFromBytes() (err error)
 ```
 DecodeDTMFFromBytes This decodes the audio bytes and saves the value in
 DTMF.DecodedValue
+
+
+### Credits
+It was initially built on [goertzel](https://github.com/CyCoreSystems/goertzel) by CyCoreSystems, but has been since ported to use [go-dsp](https://github.com/samuel/go-dsp).
+The underlying principle remains unchanged.
