@@ -26,12 +26,12 @@ func DecodeDTMFFromBytes(audioBytes []byte, rate float64) (string, error)
 DecodeDTMFFromBytes This decodes the audio bytes and saves the value in
 DTMF.DecodedValue
 
-#### func  DecodeDTMFValueFromFile
+#### func  DecodeDTMFFromFile
 
 ```go
 func DecodeDTMFFromFile(filepath string, rate float64) (string, error)
 ```
-DecodeDTMFValueFromFile Expects raw audio as the input, gives the decoded DTMF
+DecodeDTMFromFile Expects raw audio as the input, gives the decoded DTMF
 string as output.
 
 
