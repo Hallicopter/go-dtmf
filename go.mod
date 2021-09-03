@@ -1,4 +1,4 @@
-module dtmf
+module github.com/Hallicopter/go-dtmf/dtmf
 
 go 1.16
 
