@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"go-dtmf/dtmf"
+	"github.com/Hallicopter/go-dtmf/dtmf"
 )
 
 func main() {
