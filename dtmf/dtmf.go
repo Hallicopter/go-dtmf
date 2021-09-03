@@ -9,26 +9,11 @@ import (
 	"os"
 )
 
-type DTMF struct {
-	audioBytes   []byte
-	sampleRate   float64
-	DecodedValue string
-}
-
-// NewDTMFStruct
-// Creates and initialises a struct that can be used to call the decoding method.
-func NewDTMFStruct(sampleRate float64, audioBytes []byte) DTMF {
-	return DTMF{
-		audioBytes: audioBytes,
-		sampleRate: sampleRate,
-	}
-}
-
 // DecodeDTMFFromBytes
 // This decodes the audio bytes and saves the value in DTMF.DecodedValue
-func (dtmf *DTMF) DecodeDTMFFromBytes() (err error) {
-	if len(dtmf.audioBytes) == 0 {
-		return errors.New("audio in the dtmf structure contains no bytes")
+func DecodeDTMFFromBytes(audioBytes []byte, rate float64) (string, error) {
+	if len(audioBytes) == 0 {
+		return "", errors.New("audio in the dtmf structure contains no bytes")
 	}
 
 	var dtmfOutput string
@@ -40,7 +25,7 @@ func (dtmf *DTMF) DecodeDTMFFromBytes() (err error) {
 	keyCount := 0
 	samples := make([]float32, blockSize)
 
-	rd := bytes.NewReader(dtmf.audioBytes)
+	rd := bytes.NewReader(audioBytes)
 
 	buf := make([]byte, window*2)
 
@@ -72,8 +57,7 @@ func (dtmf *DTMF) DecodeDTMFFromBytes() (err error) {
 		}
 	}
 
-	dtmf.DecodedValue = dtmfOutput
-	return
+	return dtmfOutput, nil
 }
 
 // DecodeDTMFValueFromFile
@@ -84,11 +68,9 @@ func DecodeDTMFValueFromFile(filepath string, rate float64) (string, error) {
 		return "N/A", err
 	}
 
-	d := NewDTMFStruct(rate, audioBytes)
-
-	err = d.DecodeDTMFFromBytes()
+	decodedValue, err := DecodeDTMFFromBytes(audioBytes, rate)
 	if err != nil {
 		return "N/A", err
 	}
-	return d.DecodedValue, nil
+	return decodedValue, nil
 }
