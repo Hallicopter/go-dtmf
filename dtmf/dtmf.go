@@ -3,8 +3,8 @@ package dtmf
 import (
 	"bytes"
 	"errors"
-	utils "github.com/Hallicopter/go-dtmf/utils/dsp/dtmf"
 	"github.com/caicloud/nirvana/log"
+	utils "go-dtmf/utils/dsp/dtmf"
 	"io"
 	"os"
 )
