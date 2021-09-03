@@ -2,88 +2,82 @@ package dtmf
 
 import (
 	"bytes"
-	"context"
-	"errors"
-	"fmt"
 	"github.com/caicloud/nirvana/log"
-	"goertzel"
-	"time"
-)
-
-// Standard frequencies for DTMF as per RFC.
-var (
-	Keypad = []rune{
-		'1', '2', '3', 'A',
-		'4', '5', '6', 'B',
-		'7', '8', '9', 'C',
-		'*', '0', '#', 'D',
-	}
-	StdLowFreq        = []float64{697, 770, 852, 941}
-	StdHighFreq       = []float64{1209, 1336, 1477, 1633}
-	NoDigitFoundError = errors.New("no digit found")
+	utils "go-dtmf/utils/dsp/dtmf"
+	"io"
+	"os"
 )
 
 type DTMF struct {
-	audioBytes      []byte
-	sampleRate      float64
-	DecodedValue    rune
-	minimumDuration time.Duration
+	audioBytes   []byte
+	sampleRate   float64
+	DecodedValue string
 }
 
-func NewDTMFStruct(sampleRate float64, minDur time.Duration, audioBytes []byte) DTMF {
+func NewDTMFStruct(sampleRate float64, audioBytes []byte) DTMF {
 	return DTMF{
-		audioBytes:      audioBytes,
-		sampleRate:      sampleRate,
-		minimumDuration: minDur,
+		audioBytes: audioBytes,
+		sampleRate: sampleRate,
 	}
 }
 
-func (dtmf *DTMF) DecodeDTMFFromBytes(tolerance int) (dtmfChar rune, err error) {
-	var found bool
-	var row, col int
-	var freq float64
-	var foundLowFreq, foundHighFreq bool
-	var toleranceSlice = make([]float64, tolerance*2+1)
+func (dtmf *DTMF) DecodeDTMFFromBytes() (err error) {
+	var dtmfOutput string
+	sampleRate := 8000
+	blockSize := 205 * sampleRate / 8000
+	window := blockSize / 4
+	dt := utils.NewStandard(sampleRate, blockSize)
+	lastKey := -1
+	keyCount := 0
+	samples := make([]float32, blockSize)
 
-	// Looks for the dual tones of the Dual Tones Multi Frequency fame.
+	rd := bytes.NewReader(dtmf.audioBytes)
 
-	for i := -tolerance; i<tolerance; i++ {
-		toleranceSlice[i+tolerance] = float64(i)
-	}
+	buf := make([]byte, window*2)
 
-
-	for _, tolerance := range toleranceSlice {
-		for row, freq = range StdLowFreq {
-			found, err = goertzel.DetectTone(context.Background(), freq+tolerance, dtmf.sampleRate, dtmf.minimumDuration, bytes.NewReader(dtmf.audioBytes))
-			if found {
-				fmt.Println("Founder lower freq", freq+tolerance, "row", row)
-				foundLowFreq = true
-				break
-			}
-		}
-		if foundLowFreq {
+	for {
+		_, err := rd.Read(buf)
+		if err == io.EOF {
 			break
+		} else if err != nil {
+			log.Fatal(err)
 		}
-	}
 
-	for _, tolerance := range toleranceSlice {
-		for col, freq = range StdHighFreq {
-			found, err = goertzel.DetectTone(context.Background(), freq+tolerance, dtmf.sampleRate, dtmf.minimumDuration, bytes.NewReader(dtmf.audioBytes))
-			if found {
-				fmt.Println("Founder higher freq", freq+tolerance, "col", col)
-				foundHighFreq = true
-				break
+		copy(samples, samples[window:])
+
+		si := len(samples) - window
+		for i := 0; i < len(buf); i += 2 {
+			s := float32(int16(buf[i])|(int16(buf[i+1])<<8)) / 32768.0
+			samples[si] = s
+			si++
+		}
+
+		if k, t := dt.Feed(samples); k == lastKey && t > 0.0 {
+			keyCount++
+			if keyCount == 12 {
+				dtmfOutput += string(utils.Keypad[k])
 			}
-		}
-		if foundHighFreq {
-			break
+		} else {
+			lastKey = k
+			keyCount = 0
 		}
 	}
 
-	if foundLowFreq && foundHighFreq {
-		return Keypad[row*4+col], nil
+	dtmf.DecodedValue = dtmfOutput
+	return
+}
+
+func GetSingleDTMFValueFromFile(filepath string, rate float64) (string, error) {
+	audioBytes, err := os.ReadFile(filepath)
+	if err != nil {
+		return "N/A", err
 	}
 
-	log.Infof("No character found in DTMF")
-	return '-', NoDigitFoundError
+	d := NewDTMFStruct(rate, audioBytes)
+
+	err = d.DecodeDTMFFromBytes()
+	if err != nil {
+		return "N/A", err
+	}
+	return d.DecodedValue, nil
 }
