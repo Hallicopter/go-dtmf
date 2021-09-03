@@ -13,7 +13,7 @@ The examples can be run from the examples folder.
 
 ### dtmf
 
-    import "go-dtmf/dtmf"
+    import "github.com/Hallicopter/go-dtmf/dtmf"
 
 
 ### Usage

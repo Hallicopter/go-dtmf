@@ -1,8 +1,8 @@
 package test
 
 import (
+	"github.com/Hallicopter/go-dtmf/dtmf"
 	"github.com/stretchr/testify/assert"
-	"go-dtmf/dtmf"
 	"testing"
 )
 
