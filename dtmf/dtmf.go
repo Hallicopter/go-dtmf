@@ -17,7 +17,7 @@ func DecodeDTMFFromBytes(audioBytes []byte, rate float64) (string, error) {
 	}
 
 	var dtmfOutput string
-	sampleRate := 8000
+	sampleRate := int(rate)
 	blockSize := 205 * sampleRate / 8000
 	window := blockSize / 4
 	dt := utils.NewStandard(sampleRate, blockSize)
