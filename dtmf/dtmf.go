@@ -60,9 +60,9 @@ func DecodeDTMFFromBytes(audioBytes []byte, rate float64) (string, error) {
 	return dtmfOutput, nil
 }
 
-// DecodeDTMFValueFromFile
+// DecodeDTMFFromFile
 // Expects raw audio as the input, gives the decoded DTMF string as output.
-func DecodeDTMFValueFromFile(filepath string, rate float64) (string, error) {
+func DecodeDTMFFromFile(filepath string, rate float64) (string, error) {
 	audioBytes, err := os.ReadFile(filepath)
 	if err != nil {
 		return "N/A", err

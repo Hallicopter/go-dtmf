@@ -29,7 +29,7 @@ DTMF.DecodedValue
 #### func  DecodeDTMFValueFromFile
 
 ```go
-func DecodeDTMFValueFromFile(filepath string, rate float64) (string, error)
+func DecodeDTMFFromFile(filepath string, rate float64) (string, error)
 ```
 DecodeDTMFValueFromFile Expects raw audio as the input, gives the decoded DTMF
 string as output.
