@@ -1,6 +1,6 @@
 # go-dtmf, the simplest way to decode DTMF audio in golang. 
 
-### About
+## About
 This library provides two high level API to decode DTMF audio or byte slice. 
 It uses the Goertzel algorithm. 
 
@@ -9,7 +9,7 @@ The examples can be run from the examples folder.
 
 ``go run examples/dtmf_file.go``
 
-### Docs
+## Docs
 
 ### dtmf
 
@@ -17,6 +17,14 @@ The examples can be run from the examples folder.
 
 
 ### Usage
+
+#### func  DecodeDTMFFromBytes
+
+```go
+func DecodeDTMFFromBytes(audioBytes []byte, rate float64) (string, error)
+```
+DecodeDTMFFromBytes This decodes the audio bytes and saves the value in
+DTMF.DecodedValue
 
 #### func  DecodeDTMFValueFromFile
 
@@ -26,30 +34,6 @@ func DecodeDTMFValueFromFile(filepath string, rate float64) (string, error)
 DecodeDTMFValueFromFile Expects raw audio as the input, gives the decoded DTMF
 string as output.
 
-#### type DTMF
-
-```go
-type DTMF struct {
-	DecodedValue string
-}
-```
-
-
-#### func  NewDTMFStruct
-
-```go
-func NewDTMFStruct(sampleRate float64, audioBytes []byte) DTMF
-```
-NewDTMFStruct Creates and initialises a struct that can be used to call the
-decoding method.
-
-#### func (*DTMF) DecodeDTMFFromBytes
-
-```go
-func (dtmf *DTMF) DecodeDTMFFromBytes() (err error)
-```
-DecodeDTMFFromBytes This decodes the audio bytes and saves the value in
-DTMF.DecodedValue
 
 
 ### Credits
