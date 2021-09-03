@@ -2,6 +2,7 @@ package dtmf
 
 import (
 	"bytes"
+	"errors"
 	"github.com/caicloud/nirvana/log"
 	utils "go-dtmf/utils/dsp/dtmf"
 	"io"
@@ -14,6 +15,8 @@ type DTMF struct {
 	DecodedValue string
 }
 
+// NewDTMFStruct
+// Creates and initialises a struct that can be used to call the decoding method.
 func NewDTMFStruct(sampleRate float64, audioBytes []byte) DTMF {
 	return DTMF{
 		audioBytes: audioBytes,
@@ -21,7 +24,13 @@ func NewDTMFStruct(sampleRate float64, audioBytes []byte) DTMF {
 	}
 }
 
+// DecodeDTMFFromBytes
+// This decodes the audio bytes and saves the value in DTMF.DecodedValue
 func (dtmf *DTMF) DecodeDTMFFromBytes() (err error) {
+	if len(dtmf.audioBytes) == 0 {
+		return errors.New("audio in the dtmf structure contains no bytes")
+	}
+
 	var dtmfOutput string
 	sampleRate := 8000
 	blockSize := 205 * sampleRate / 8000
@@ -67,6 +76,8 @@ func (dtmf *DTMF) DecodeDTMFFromBytes() (err error) {
 	return
 }
 
+// DecodeDTMFValueFromFile
+// Expects raw audio as the input, gives the decoded DTMF string as output.
 func DecodeDTMFValueFromFile(filepath string, rate float64) (string, error) {
 	audioBytes, err := os.ReadFile(filepath)
 	if err != nil {
