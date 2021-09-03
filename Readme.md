@@ -37,5 +37,5 @@ string as output.
 
 
 ## Credits
-It was initially built on [goertzel](https://github.com/CyCoreSystems/goertzel) by CyCoreSystems, but has been since ported to use [go-dsp](https://github.com/samuel/go-dsp).
+It was initially built on [goertzel](https://github.com/CyCoreSystems/goertzel) by CyCoreSystems, but has been since ported to use a modified version of [go-dsp](https://github.com/samuel/go-dsp).
 The underlying principle remains unchanged.
