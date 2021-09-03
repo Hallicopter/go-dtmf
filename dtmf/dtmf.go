@@ -67,7 +67,7 @@ func (dtmf *DTMF) DecodeDTMFFromBytes() (err error) {
 	return
 }
 
-func GetSingleDTMFValueFromFile(filepath string, rate float64) (string, error) {
+func DecodeDTMFValueFromFile(filepath string, rate float64) (string, error) {
 	audioBytes, err := os.ReadFile(filepath)
 	if err != nil {
 		return "N/A", err
