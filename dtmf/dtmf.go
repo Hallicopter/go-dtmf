@@ -11,7 +11,10 @@ import (
 
 // DecodeDTMFFromBytes
 // This decodes the audio bytes and saves the value in DTMF.DecodedValue
-func DecodeDTMFFromBytes(audioBytes []byte, rate float64) (string, error) {
+// The wiggleRoom value is recommended to be between 5-15.
+// For shorter, sharper, faster DTMF audios, a wiggleRoom of 5 would be good.
+// For longer, more continuous DTMF audios, a higher wiggleRoom will prevent false repeats.
+func DecodeDTMFFromBytes(audioBytes []byte, rate float64, wiggleRoom int) (string, error) {
 	if len(audioBytes) == 0 {
 		return "", errors.New("audio in the dtmf structure contains no bytes")
 	}
@@ -48,7 +51,7 @@ func DecodeDTMFFromBytes(audioBytes []byte, rate float64) (string, error) {
 
 		if k, t := dt.Feed(samples); k == lastKey && t > 0.0 {
 			keyCount++
-			if keyCount == 12 {
+			if keyCount == wiggleRoom {
 				dtmfOutput += string(utils.Keypad[k])
 			}
 		} else {
@@ -62,13 +65,16 @@ func DecodeDTMFFromBytes(audioBytes []byte, rate float64) (string, error) {
 
 // DecodeDTMFFromFile
 // Expects raw audio as the input, gives the decoded DTMF string as output.
-func DecodeDTMFFromFile(filepath string, rate float64) (string, error) {
+// The wiggleRoom value is recommended to be between 5-15.
+// For shorter, sharper, faster DTMF audios, a wiggleRoom of 5 would be good.
+// For longer, more continuous DTMF audios, a higher wiggleRoom will prevent false repeats.
+func DecodeDTMFFromFile(filepath string, rate float64, wiggleRoom int) (string, error) {
 	audioBytes, err := os.ReadFile(filepath)
 	if err != nil {
 		return "N/A", err
 	}
 
-	decodedValue, err := DecodeDTMFFromBytes(audioBytes, rate)
+	decodedValue, err := DecodeDTMFFromBytes(audioBytes, rate, wiggleRoom)
 	if err != nil {
 		return "N/A", err
 	}
