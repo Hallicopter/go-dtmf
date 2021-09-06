@@ -12,27 +12,32 @@ The examples can be run from the examples folder.
 ## Docs
 
 ### dtmf
-
-    import "github.com/Hallicopter/go-dtmf/dtmf"
+    import "go-dtmf/dtmf"
 
 
 ### Usage
 
-#### func  DecodeDTMFFromBytes
+### func  DecodeDTMFFromBytes
 
 ```go
-func DecodeDTMFFromBytes(audioBytes []byte, rate float64) (string, error)
+func DecodeDTMFFromBytes(audioBytes []byte, rate float64, wiggleRoom int) (string, error)
 ```
 DecodeDTMFFromBytes This decodes the audio bytes and saves the value in
-DTMF.DecodedValue
+DTMF.DecodedValue The wiggleRoom value is recommended to be between 5-15. For
+shorter, sharper, faster DTMF audios, a wiggleRoom of 5 would be good. For
+longer, more continuous DTMF audios, a higher wiggleRoom will prevent false
+repeats.
 
-#### func  DecodeDTMFFromFile
+### func  DecodeDTMFFromFile
 
 ```go
-func DecodeDTMFFromFile(filepath string, rate float64) (string, error)
+func DecodeDTMFFromFile(filepath string, rate float64, wiggleRoom int) (string, error)
 ```
-DecodeDTMFromFile Expects raw audio as the input, gives the decoded DTMF
-string as output.
+DecodeDTMFFromFile Expects raw audio as the input, gives the decoded DTMF string
+as output. The wiggleRoom value is recommended to be between 5-15. For shorter,
+sharper, faster DTMF audios, a wiggleRoom of 5 would be good. For longer, more
+continuous DTMF audios, a higher wiggleRoom will prevent false repeats.
+
 
 
 
