@@ -1,4 +1,4 @@
-package dsp
+package utils
 
 type ComplexSource interface {
 	Source() ([]complex64, error)

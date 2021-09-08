@@ -1,6 +1,6 @@
 // +build amd64
 
-package dsp
+package utils
 
 //defined in asm_amd64.s
 func hasSSE4() bool
