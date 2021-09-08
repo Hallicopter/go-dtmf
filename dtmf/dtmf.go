@@ -3,7 +3,7 @@ package dtmf
 import (
 	"bytes"
 	"errors"
-	utils "github.com/Hallicopter/go-dtmf/utils/dsp/dtmf"
+	utils "github.com/Hallicopter/go-dtmf/utils/dtmf"
 	"github.com/caicloud/nirvana/log"
 	"io"
 	"os"
