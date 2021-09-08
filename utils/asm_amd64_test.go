@@ -1,6 +1,6 @@
 // +build amd64
 
-package dsp
+package utils
 
 import "testing"
 
