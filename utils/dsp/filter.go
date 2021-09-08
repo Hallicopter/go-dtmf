@@ -1,4 +1,4 @@
-package utils
+package dsp
 
 type IIRFilter struct {
 	bCoef, aCoef []float64
