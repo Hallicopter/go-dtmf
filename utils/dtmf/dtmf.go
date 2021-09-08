@@ -1,7 +1,7 @@
 package dtmf
 
 import (
-	"github.com/Hallicopter/go-dtmf/utils/dsp"
+	dsp "github.com/Hallicopter/go-dtmf/utils"
 )
 
 var (
