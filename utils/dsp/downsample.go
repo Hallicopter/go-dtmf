@@ -1,4 +1,4 @@
-package utils
+package dsp
 
 type LowPassDownsampleComplexFilter struct {
 	Downsample int
