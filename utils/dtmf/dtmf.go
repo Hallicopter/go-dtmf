@@ -1,7 +1,7 @@
 package dtmf
 
 import (
-	dsp "github.com/Hallicopter/go-dtmf/utils"
+	dsp "github.com/speechcatch/go-dtmf/utils"
 )
 
 var (

@@ -3,10 +3,11 @@ package dtmf
 import (
 	"bytes"
 	"errors"
-	utils "github.com/Hallicopter/go-dtmf/utils/dtmf"
-	"github.com/caicloud/nirvana/log"
 	"io"
 	"os"
+
+	"github.com/caicloud/nirvana/log"
+	utils "github.com/speechcatch/go-dtmf/utils/dtmf"
 )
 
 // DecodeDTMFFromBytes
@@ -14,7 +15,7 @@ import (
 // The wiggleRoom value is recommended to be between 5-15.
 // For shorter, sharper, faster DTMF audios, a wiggleRoom of 5 would be good.
 // For longer, more continuous DTMF audios, a higher wiggleRoom will prevent false repeats.
-func DecodeDTMFFromBytes(audioBytes []byte, rate float64, wiggleRoom int) (string, error) {
+func DecodeDTMFFromBytes(audioBytes []byte, rate float64, wiggleRoom int, threshold float32) (string, error) {
 	if len(audioBytes) == 0 {
 		return "", errors.New("audio in the dtmf structure contains no bytes")
 	}
@@ -49,7 +50,7 @@ func DecodeDTMFFromBytes(audioBytes []byte, rate float64, wiggleRoom int) (strin
 			si++
 		}
 
-		if k, t := dt.Feed(samples); k == lastKey && t > 0.0 {
+		if k, t := dt.Feed(samples); k == lastKey && t > threshold {
 			keyCount++
 			if keyCount == wiggleRoom {
 				dtmfOutput += string(utils.Keypad[k])
@@ -68,13 +69,13 @@ func DecodeDTMFFromBytes(audioBytes []byte, rate float64, wiggleRoom int) (strin
 // The wiggleRoom value is recommended to be between 5-15.
 // For shorter, sharper, faster DTMF audios, a wiggleRoom of 5 would be good.
 // For longer, more continuous DTMF audios, a higher wiggleRoom will prevent false repeats.
-func DecodeDTMFFromFile(filepath string, rate float64, wiggleRoom int) (string, error) {
+func DecodeDTMFFromFile(filepath string, rate float64, wiggleRoom int, threshold float32) (string, error) {
 	audioBytes, err := os.ReadFile(filepath)
 	if err != nil {
 		return "N/A", err
 	}
 
-	decodedValue, err := DecodeDTMFFromBytes(audioBytes, rate, wiggleRoom)
+	decodedValue, err := DecodeDTMFFromBytes(audioBytes, rate, wiggleRoom, threshold)
 	if err != nil {
 		return "N/A", err
 	}

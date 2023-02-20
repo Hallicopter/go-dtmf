@@ -1,4 +1,4 @@
-module github.com/Hallicopter/go-dtmf
+module github.com/speechcatch/go-dtmf
 
 go 1.16
 
